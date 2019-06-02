@@ -1,0 +1,14 @@
+Package: SimexSurvOutcome
+Type: Package
+Title: SIMEX for survival time error
+Version: 1.0
+Date: 2019-06-01
+Author: c(
+  person("Eric, "Oh", email = "ericoh17@gmail.com",
+    role = c("aut, "cre"))
+Maintainer: Eric Oh <ericoh17@gmail.com>
+Description: An implementation of the SIMEX algorithm to correct for multiplicative time-to-event error. Assumes prior knowledge of measurement error variance. 
+License: What license is it under?
+Imports: Rcpp (>= 1.0.1)
+LinkingTo: Rcpp, RcppArmadillo
+RoxygenNote: 6.1.1
