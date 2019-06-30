@@ -22,6 +22,9 @@
 #'
 #' @param simex_sd Standard deviation of
 #' multiplicative error in event-time
+#' 
+#' @param num_boot Number of bootstrap
+#' replicates desired
 #'
 #' @return Matrix of corrected betas
 #'
@@ -32,7 +35,8 @@
 #' @rdname simex_surv_outcome
 #' @export
 simex_surv_outcome <- function(pred_mat, lambdavec, fail_times,
-                               fail_ind, B = 50, simex_sd) {
+                               fail_ind, B = 50, simex_sd,
+                               num_boot = 250) {
 
   # prepare data for analysis
   pred_mat <- as.matrix(pred_mat)
@@ -44,12 +48,31 @@ simex_surv_outcome <- function(pred_mat, lambdavec, fail_times,
   init_b <- matrix(c(0, 0, 0), nrow = 3, ncol = 1)
   n <- dim(pred_mat)[1]
   simex_sd <- as.numeric(simex_sd)
+  
+  message("Running SIMEX")
 
   # get SIMEX estimates
   betas_simex <- simexOutcome(pred_mat, lambdavec, fail_times,
                               fail_ind, init_b, B, simex_sd, n)
+  
+  message("Calculating standard errors for SIMEX")
+  
+  simex_boot <- replicate(num_boot, bootstrap_simex(pred_mat,
+                                                    lambdavec,
+                                                    fail_times,
+                                                    fail_ind,
+                                                    init_b,
+                                                    B, 
+                                                    simex_sd,
+                                                    n))
+  
+  print(dim(simex_boot))
+  
+  message("Done!")
 
-  return(betas_simex)
+  return(list(betas_simex, 
+              sd(simex_boot[1,], na.rm = TRUE), 
+              sd(simex_boot[2,], na.rm = TRUE)))
 
 }
 
