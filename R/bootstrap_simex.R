@@ -1,12 +1,8 @@
 
-#' Calculates SIMEX estimates for error in a time-to-event
+#' Calculates SIMEX estimates for resampled data
 #'
-#' The SIMEX method adds additional error to the error-prone
-#' time-to-event that has either known standard deviation or
-#' is calculated from a validation subset. Then, a quadratic
-#' function is fit to the error-prone estimates with
-#' additional error and we extrapolate the function to
-#' where theoretically, there is no error
+#' Runs the bootstrap to calculate standard
+#' errors for the SIMEX procedure
 #'
 #' @param pred_mat Matrix of predictors
 #'

@@ -5,7 +5,7 @@
 \title{Calculates SIMEX estimates for error in a time-to-event}
 \usage{
 simex_surv_outcome(pred_mat, lambdavec, fail_times, fail_ind, B = 50,
-  simex_sd)
+  simex_sd, num_boot = 250)
 }
 \arguments{
 \item{pred_mat}{Matrix of predictors}
@@ -19,6 +19,9 @@ failure times}
 
 \item{simex_sd}{Standard deviation of
 multiplicative error in event-time}
+
+\item{num_boot}{Number of bootstrap
+replicates desired}
 
 \item{lambavec}{Vector of lambda params
 for SIMEX algorithm}
