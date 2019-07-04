@@ -41,7 +41,7 @@ data(example_dat)
 ```
 
 ```{r}
-cov <- c("Gender", "CD4", "Age")
+cov <- c("X1", "X2", "X3")
 X_mat <- example_dat[, cov]
 
 time_star <- example_dat[, "time_star"]
