@@ -40,6 +40,10 @@ First, we will read in a simulated dataset.
 data(example_dat)
 ```
 
+Then we extract separate dataframes containing the
+covariates, error-prone censored event time, and
+the failure indicator. 
+
 ```{r}
 cov <- c("X1", "X2", "X3")
 X_mat <- example_dat[, cov]
