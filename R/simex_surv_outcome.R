@@ -37,12 +37,35 @@
 simex_surv_outcome <- function(pred_mat, lambdavec, fail_times,
                                fail_ind, B = 50, simex_sd,
                                num_boot = 250) {
+  
+  if (B%%1 != 0) {
+    stop("B must be an integer")
+  }
+  
+  if (num_boot%%1 != 0) {
+    stop("num_boot must be an integer")
+  }
+  
+  if (simex_sd <= 0) {
+    stop("simex_sd must be greater than 0")
+  }
+  
+  if (any(lambdavec < 0)) {
+    stop("All lambda values must be at least 0")
+  }
 
   # prepare data for analysis
   pred_mat <- as.matrix(pred_mat)
   lambdavec <- c(lambdavec)
   fail_times <- c(fail_times)
   fail_ind <- as.matrix(fail_ind)
+  
+  if (all(sapply(list(dim(pred_mat)[1],
+                      length(fail_times)) 
+                 function(x) x == dim(fail_ind)[1])) == FALSE) {
+    stop("X_mat, time_star, and delta must all contain the same
+         number of observations")
+  }
 
   # create necessary variables
   init_b <- matrix(c(0, 0, 0), nrow = 3, ncol = 1)
@@ -66,13 +89,20 @@ simex_surv_outcome <- function(pred_mat, lambdavec, fail_times,
                                                     simex_sd,
                                                     n))
   
-  print(dim(simex_boot))
-  
   message("Done!")
-
-  return(list(betas_simex, 
-              sd(simex_boot[1,], na.rm = TRUE), 
-              sd(simex_boot[2,], na.rm = TRUE)))
+  
+  simex_mat <- matrix(c(betas_simex[1,],
+                        sd(simex_boot[1,], na.rm = TRUE),
+                        betas_simex[2,],
+                        sd(simex_boot[2,], na.rm = TRUE),
+                        betas_simex[3,],
+                        sd(simex_boot[3,], na.rm = TRUE)),
+                      nrow = 3, ncol = 2, byrow = TRUE)
+  
+  rownames(simex_mat) <- colnames(pred_mat)
+  colnames(simex_mat) <- c("Estimate", "Standard Error")
+  
+  return(as.data.frame(simex_mat))
 
 }
 
